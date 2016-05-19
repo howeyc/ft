@@ -43,5 +43,5 @@ on another machine, I start the server, ssh to the puller and start the get.
 ### Pulling host
 
 ```sh
-	$ fastget -remote pulling-host:9002
+	$ fastget -remote serving-host:9002
 ```
