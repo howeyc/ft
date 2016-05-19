@@ -1,7 +1,7 @@
 # Fast Transfer
 
 This is two applications that work in tandem to allow one host to quicky 
-donwnload the contents of a folder on the serving host. A connection is opened
+download the contents of a folder on the serving host. A connection is opened
 for each file to be downloaded. Beware folders with lots of files, lots of 
 connections will be made.
 
