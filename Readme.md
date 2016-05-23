@@ -1,6 +1,6 @@
 # Folder Transfer
 
-This is two applications that work in tandem to allow one host to quicky 
+This is to allow one host to quicky 
 download the contents of a folder on the serving host. A connection is opened
 for each file to be downloaded. Beware folders with lots of files, lots of 
 connections will be made.
