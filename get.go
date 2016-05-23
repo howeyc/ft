@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/gob"
-	"flag"
+	"fmt"
 	"io"
 	"net"
 	"os"
@@ -10,21 +10,22 @@ import (
 	"sync"
 
 	"github.com/cheggaaa/pb"
+	"github.com/spf13/cobra"
 )
 
-type Request struct {
-	Type  string
-	Value string
-}
+func Get(cmd *cobra.Command, args []string) {
+	dest := "."
+	if len(args) < 1 {
+		cmd.Usage()
+		os.Exit(1)
+	}
+	host, path := parseFileHostLocation(args[0])
 
-func main() {
-	var folder string
-	var dest string
-	var remoteAddr string
-	flag.StringVar(&folder, "folder", ".", "folder to download")
-	flag.StringVar(&dest, "dest", ".", "folder to save files to")
-	flag.StringVar(&remoteAddr, "remote", "", "server:port to connect to")
-	flag.Parse()
+	if len(args) > 1 {
+		dest = args[1]
+	}
+
+	remoteAddr := fmt.Sprintf("%s:%d", host, portNumber)
 
 	server, derr := net.Dial("tcp", remoteAddr)
 	if derr != nil {
@@ -32,7 +33,7 @@ func main() {
 	}
 
 	genc := gob.NewEncoder(server)
-	genc.Encode(Request{Type: "List", Value: folder})
+	genc.Encode(Request{Type: "List", Value: path})
 
 	type listResult struct {
 		Path string
@@ -63,7 +64,9 @@ func main() {
 	for i, res := range results {
 		wg.Add(1)
 		go func(path string, size int64, idx int) {
-			os.MkdirAll(dest, 0777)
+			fulldest := filepath.Join(dest, path)
+			fulldir := filepath.Dir(fulldest)
+			os.MkdirAll(fulldir, 0777)
 			ofile, oerr := os.Create(filepath.Join(dest, path))
 			if oerr != nil {
 				return

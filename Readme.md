@@ -1,4 +1,4 @@
-# Fast Transfer
+# Folder Transfer
 
 This is two applications that work in tandem to allow one host to quicky 
 download the contents of a folder on the serving host. A connection is opened
@@ -37,11 +37,11 @@ on another machine, I start the server, ssh to the puller and start the get.
 ### Serving host
 
 ```sh
-	$ fastserve -port 9002
+	$ ft serve
 ```
 
 ### Pulling host
 
 ```sh
-	$ fastget -remote serving-host:9002
+	$ ft get serving-host
 ```
